@@ -1,0 +1,229 @@
+{
+  "info": {
+    "_postman_id": "ede31f2a-18c3-4ee5-bb24-75b462baea28",
+    "name": "Postman API Testing - DummyJSON",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58782308",
+    "_collection_link": "https://go.postman.co/collection/58782308-ede31f2a-18c3-4ee5-bb24-75b462baea28?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "TC01 - GET Users",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response is JSON\", function () {\n    pm.response.to.be.json;\n});\n\npm.test(\"Users is an array\", function () {\n    const data = pm.response.json();\n    pm.expect(data.users).to.be.an(\"array\");\n    pm.expect(data.users.length).to.be.greaterThan(0);\n});\n\npm.test(\"Response has pagination fields\", function () {\n    const data = pm.response.json();\n    pm.expect(data).to.have.property(\"total\");\n    pm.expect(data).to.have.property(\"skip\");\n    pm.expect(data).to.have.property(\"limit\");\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://dummyjson.com/users",
+          "protocol": "https",
+          "host": [
+            "dummyjson",
+            "com"
+          ],
+          "path": [
+            "users"
+          ]
+        },
+        "description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+      },
+      "response": []
+    },
+    {
+      "name": "TC03 - POST Add User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {\n    pm.response.to.have.status(201);\n});\n\npm.test(\"Created user has correct data\", function () {\n    const data = pm.response.json();\n\n    pm.expect(data.firstName).to.eql(\"Nguyen\");\n    pm.expect(data.lastName).to.eql(\"Van An\");\n    pm.expect(data.age).to.eql(21);\n});\n\npm.test(\"Response contains an ID\", function () {\n    const data = pm.response.json();\n    pm.expect(data).to.have.property(\"id\");\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"firstName\": \"Nguyen\",\n  \"lastName\": \"Van An\",\n  \"age\": 21\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://dummyjson.com/users/add",
+          "protocol": "https",
+          "host": [
+            "dummyjson",
+            "com"
+          ],
+          "path": [
+            "users",
+            "add"
+          ]
+        },
+        "description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+      },
+      "response": []
+    },
+    {
+      "name": "TC02-GET ID",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"User ID is 1\", function () {\r\n    const data = pm.response.json();\r\n    pm.expect(data.id).to.eql(1);\r\n});\r\n\r\npm.test(\"User has a name\", function () {\r\n    const data = pm.response.json();\r\n    pm.expect(data.firstName).to.be.a(\"string\").and.not.empty;\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://dummyjson.com/users/1",
+          "protocol": "https",
+          "host": [
+            "dummyjson",
+            "com"
+          ],
+          "path": [
+            "users",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC04 - PUT Update User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Last name is updated\", function () {\r\n    const data = pm.response.json();\r\n    pm.expect(data.lastName).to.eql(\"PostmanTest\");\r\n});\r\n\r\npm.test(\"Response contains user ID\", function () {\r\n    const data = pm.response.json();\r\n    pm.expect(Number(data.id)).to.eql(1);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"lastName\": \"PostmanTest\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://dummyjson.com/users/1",
+          "protocol": "https",
+          "host": [
+            "dummyjson",
+            "com"
+          ],
+          "path": [
+            "users",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC05 - DELETE User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Response confirms deletion\", function () {\r\n    const data = pm.response.json();\r\n    pm.expect(data.isDeleted).to.eql(true);\r\n});\r\n\r\npm.test(\"Response contains deleted user ID\", function () {\r\n    const data = pm.response.json();\r\n    pm.expect(Number(data.id)).to.eql(1);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "https://dummyjson.com/users/1",
+          "protocol": "https",
+          "host": [
+            "dummyjson",
+            "com"
+          ],
+          "path": [
+            "users",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC06 - GET HTTP 404",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\npm.test(\"Response contains error status\", function () {\r\n    const data = pm.response.json();\r\n    pm.expect(data.status).to.eql(\"404\");\r\n});\r\n\r\npm.test(\"Response contains error message\", function () {\r\n    const data = pm.response.json();\r\n    pm.expect(data.message).to.eql(\"Not_Found\");\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://dummyjson.com/http/404/Not_Found",
+          "protocol": "https",
+          "host": [
+            "dummyjson",
+            "com"
+          ],
+          "path": [
+            "http",
+            "404",
+            "Not_Found"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "New Request",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    }
+  ]
+}
